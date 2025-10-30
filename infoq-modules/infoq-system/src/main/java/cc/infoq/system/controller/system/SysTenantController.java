@@ -1,0 +1,196 @@
+package cc.infoq.system.controller.system;
+
+import cc.infoq.common.constant.TenantConstants;
+import cc.infoq.common.domain.ApiResult;
+import cc.infoq.common.encrypt.annotation.ApiEncrypt;
+import cc.infoq.common.excel.utils.ExcelUtil;
+import cc.infoq.common.log.annotation.Log;
+import cc.infoq.common.log.enums.BusinessType;
+import cc.infoq.common.mybatis.core.page.PageQuery;
+import cc.infoq.common.mybatis.core.page.TableDataInfo;
+import cc.infoq.common.redis.annotation.RepeatSubmit;
+import cc.infoq.common.tenant.helper.TenantHelper;
+import cc.infoq.common.validate.AddGroup;
+import cc.infoq.common.validate.EditGroup;
+import cc.infoq.common.web.core.BaseController;
+import cc.infoq.system.domain.bo.SysTenantBo;
+import cc.infoq.system.domain.vo.SysTenantVo;
+import cc.infoq.system.service.SysTenantService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import com.baomidou.lock.annotation.Lock4j;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 租户管理
+ *
+ * @author Michelle.Chung
+ */
+@Validated
+@AllArgsConstructor
+@RestController
+@RequestMapping("/system/tenant")
+@ConditionalOnProperty(value = "tenant.enable", havingValue = "true")
+public class SysTenantController extends BaseController {
+
+    private final SysTenantService sysTenantService;
+
+    /**
+     * 查询租户列表
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:list")
+    @GetMapping("/list")
+    public TableDataInfo<SysTenantVo> list(SysTenantBo bo, PageQuery pageQuery) {
+        return sysTenantService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 导出租户列表
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:export")
+    @Log(title = "租户管理", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(SysTenantBo bo, HttpServletResponse response) {
+        List<SysTenantVo> list = sysTenantService.queryList(bo);
+        ExcelUtil.exportExcel(list, "租户", SysTenantVo.class, response);
+    }
+
+    /**
+     * 获取租户详细信息
+     *
+     * @param id 主键
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:query")
+    @GetMapping("/{id}")
+    public ApiResult<SysTenantVo> getInfo(@NotNull(message = "主键不能为空")
+                                  @PathVariable Long id) {
+        return ApiResult.ok(sysTenantService.queryById(id));
+    }
+
+    /**
+     * 新增租户
+     */
+    @ApiEncrypt
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:add")
+    @Log(title = "租户管理", businessType = BusinessType.INSERT)
+    @Lock4j
+    @RepeatSubmit()
+    @PostMapping()
+    public ApiResult<Void> add(@Validated(AddGroup.class) @RequestBody SysTenantBo bo) {
+        if (!sysTenantService.checkCompanyNameUnique(bo)) {
+            return ApiResult.fail("新增租户'" + bo.getCompanyName() + "'失败，企业名称已存在");
+        }
+        return toAjax(TenantHelper.ignore(() -> sysTenantService.insertByBo(bo)));
+    }
+
+    /**
+     * 修改租户
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:edit")
+    @Log(title = "租户管理", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PutMapping()
+    public ApiResult<Void> edit(@Validated(EditGroup.class) @RequestBody SysTenantBo bo) {
+        sysTenantService.checkTenantAllowed(bo.getTenantId());
+        if (!sysTenantService.checkCompanyNameUnique(bo)) {
+            return ApiResult.fail("修改租户'" + bo.getCompanyName() + "'失败，公司名称已存在");
+        }
+        return toAjax(sysTenantService.updateByBo(bo));
+    }
+
+    /**
+     * 状态修改
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:edit")
+    @Log(title = "租户管理", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PutMapping("/changeStatus")
+    public ApiResult<Void> changeStatus(@RequestBody SysTenantBo bo) {
+        sysTenantService.checkTenantAllowed(bo.getTenantId());
+        return toAjax(sysTenantService.updateTenantStatus(bo));
+    }
+
+    /**
+     * 删除租户
+     *
+     * @param ids 主键串
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:remove")
+    @Log(title = "租户管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{ids}")
+    public ApiResult<Void> remove(@NotEmpty(message = "主键不能为空")
+                          @PathVariable Long[] ids) {
+        return toAjax(sysTenantService.deleteWithValidByIds(List.of(ids), true));
+    }
+
+    /**
+     * 动态切换租户
+     *
+     * @param tenantId 租户ID
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/dynamic/{tenantId}")
+    public ApiResult<Void> dynamicTenant(@NotBlank(message = "租户ID不能为空") @PathVariable String tenantId) {
+        TenantHelper.setDynamic(tenantId, true);
+        return ApiResult.ok();
+    }
+
+    /**
+     * 清除动态租户
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/dynamic/clear")
+    public ApiResult<Void> dynamicClear() {
+        TenantHelper.clearDynamic();
+        return ApiResult.ok();
+    }
+
+
+    /**
+     * 同步租户套餐
+     *
+     * @param tenantId  租户id
+     * @param packageId 套餐id
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:tenant:edit")
+    @Log(title = "租户管理", businessType = BusinessType.UPDATE)
+    @Lock4j
+    @GetMapping("/syncTenantPackage")
+    public ApiResult<Void> syncTenantPackage(@NotBlank(message = "租户ID不能为空") String tenantId,
+                                             @NotNull(message = "套餐ID不能为空") Long packageId) {
+        return toAjax(TenantHelper.ignore(() -> sysTenantService.syncTenantPackage(tenantId, packageId)));
+    }
+
+    /**
+     * 同步租户字典
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @Log(title = "租户管理", businessType = BusinessType.INSERT)
+    @Lock4j
+    @GetMapping("/syncTenantDict")
+    public ApiResult<Void> syncTenantDict() {
+        if (!TenantHelper.isEnable()) {
+            return ApiResult.fail("当前未开启租户模式");
+        }
+        sysTenantService.syncTenantDict();
+        return ApiResult.ok("同步租户字典成功");
+    }
+
+}

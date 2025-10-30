@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.infoq</groupId>
+        <artifactId>infoq-core</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>infoq-core-data</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-tenant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-sensitive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-translation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-excel</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cc.infoq</groupId>
+        <artifactId>infoq-modules</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>infoq-system</artifactId>
+
+    <description>
+        system系统模块
+    </description>
+
+    <dependencies>
+        <!-- 通用工具-->
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-core-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-core-data</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-translation</artifactId>
+        </dependency>
+
+        <!-- OSS功能模块 -->
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-oss</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-log</artifactId>
+        </dependency>
+
+        <!-- excel-->
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-excel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-tenant</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-sensitive</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-encrypt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-sse</artifactId>
+        </dependency>
+
+        <!-- Mysql驱动包 -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-mail</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warName>${project.artifactId}</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

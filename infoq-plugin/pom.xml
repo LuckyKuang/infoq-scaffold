@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cc.infoq</groupId>
+        <artifactId>infoq-scaffold</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>infoq-plugin-encrypt</module>
+        <module>infoq-plugin-excel</module>
+        <module>infoq-plugin-jackson</module>
+        <module>infoq-plugin-log</module>
+        <module>infoq-plugin-mail</module>
+        <module>infoq-plugin-mybatis</module>
+        <module>infoq-plugin-oss</module>
+        <module>infoq-plugin-redis</module>
+        <module>infoq-plugin-satoken</module>
+        <module>infoq-plugin-security</module>
+        <module>infoq-plugin-sensitive</module>
+        <module>infoq-plugin-sse</module>
+        <module>infoq-plugin-tenant</module>
+        <module>infoq-plugin-translation</module>
+        <module>infoq-plugin-web</module>
+        <module>infoq-plugin-websocket</module>
+    </modules>
+
+    <artifactId>infoq-plugin</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        common 通用模块
+    </description>
+
+</project>

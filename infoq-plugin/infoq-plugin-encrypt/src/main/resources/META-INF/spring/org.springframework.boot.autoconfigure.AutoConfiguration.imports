@@ -1,0 +1,3 @@
+cc.infoq.common.encrypt.config.EncryptorAutoConfiguration
+cc.infoq.common.encrypt.config.ApiDecryptAutoConfiguration
+

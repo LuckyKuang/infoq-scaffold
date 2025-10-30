@@ -1,0 +1,6 @@
+cc.infoq.common.translation.config.TranslationConfig
+cc.infoq.common.translation.core.impl.DeptNameTranslationImpl
+cc.infoq.common.translation.core.impl.DictTypeTranslationImpl
+cc.infoq.common.translation.core.impl.OssUrlTranslationImpl
+cc.infoq.common.translation.core.impl.UserNameTranslationImpl
+cc.infoq.common.translation.core.impl.NicknameTranslationImpl
