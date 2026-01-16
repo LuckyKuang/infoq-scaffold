@@ -82,4 +82,9 @@ public interface SystemConstants {
      */
     Long DEFAULT_DEPT_ID = 100L;
 
+    /**
+     * 排除敏感属性字段
+     */
+    String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword" };
+
 }

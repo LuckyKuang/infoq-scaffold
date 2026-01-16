@@ -1,5 +1,6 @@
 package cc.infoq.common.log.aspect;
 
+import cc.infoq.common.constant.SystemConstants;
 import cc.infoq.common.domain.model.LoginUser;
 import cc.infoq.common.json.utils.JsonUtils;
 import cc.infoq.common.log.annotation.Log;
@@ -38,12 +39,6 @@ import java.util.*;
 @Aspect
 @AutoConfiguration
 public class LogAspect {
-
-    /**
-     * 排除敏感属性字段
-     */
-    public static final String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword" };
-
 
     /**
      * 计时 key
@@ -160,7 +155,7 @@ public class LogAspect {
             String params = argsArrayToString(joinPoint.getArgs(), excludeParamNames);
             operLog.setOperParam(StringUtils.substring(params, 0, 3800));
         } else {
-            MapUtil.removeAny(paramsMap, EXCLUDE_PROPERTIES);
+            MapUtil.removeAny(paramsMap, SystemConstants.EXCLUDE_PROPERTIES);
             MapUtil.removeAny(paramsMap, excludeParamNames);
             operLog.setOperParam(StringUtils.substring(JsonUtils.toJsonString(paramsMap), 0, 3800));
         }
@@ -174,7 +169,7 @@ public class LogAspect {
         if (ArrayUtil.isEmpty(paramsArray)) {
             return params.toString();
         }
-        String[] exclude = ArrayUtil.addAll(excludeParamNames, EXCLUDE_PROPERTIES);
+        String[] exclude = ArrayUtil.addAll(excludeParamNames, SystemConstants.EXCLUDE_PROPERTIES);
         for (Object o : paramsArray) {
             if (ObjectUtil.isNotNull(o) && !isFilterObject(o)) {
                 String str = "";

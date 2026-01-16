@@ -1,6 +1,7 @@
 package cc.infoq.common.excel.core;
 
 import cc.infoq.common.excel.annotation.ExcelDictFormat;
+import cc.infoq.common.excel.annotation.ExcelDynamicOptions;
 import cc.infoq.common.excel.annotation.ExcelEnumFormat;
 import cc.infoq.common.exception.ServiceException;
 import cc.infoq.common.service.DictService;
@@ -117,6 +118,15 @@ public class ExcelDownHandler implements SheetWriteHandler {
                 ExcelEnumFormat format = field.getDeclaredAnnotation(ExcelEnumFormat.class);
                 List<Object> values = EnumUtil.getFieldValues(format.enumClass(), format.textField());
                 options = StreamUtils.toList(values, Convert::toStr);
+            } else if (field.isAnnotationPresent(ExcelDynamicOptions.class)) {
+                // 处理动态下拉选项
+                ExcelDynamicOptions dynamicOptions = field.getDeclaredAnnotation(ExcelDynamicOptions.class);
+                // 获取提供者实例
+                ExcelOptionsProvider provider = SpringUtils.getBean(dynamicOptions.providerClass());
+                Set<String> providerOptions = provider.getOptions();
+                if (CollUtil.isNotEmpty(providerOptions)) {
+                    options = new ArrayList<>(providerOptions);
+                }
             }
             if (ObjectUtil.isNotEmpty(options)) {
                 // 仅当下拉可选项不为空时执行

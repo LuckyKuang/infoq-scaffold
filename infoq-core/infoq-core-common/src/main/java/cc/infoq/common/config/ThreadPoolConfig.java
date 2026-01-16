@@ -1,12 +1,10 @@
 package cc.infoq.common.config;
 
-import cc.infoq.common.config.properties.ThreadPoolProperties;
 import cc.infoq.common.utils.SpringUtils;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.VirtualThreadTaskExecutor;
 
@@ -19,7 +17,6 @@ import java.util.concurrent.*;
  **/
 @Slf4j
 @AutoConfiguration
-@EnableConfigurationProperties(ThreadPoolProperties.class)
 public class ThreadPoolConfig {
 
     /**
