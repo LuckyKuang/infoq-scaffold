@@ -15,6 +15,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.expression.ExpressionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -211,4 +212,12 @@ public class GlobalExceptionHandler {
         return ApiResult.fail(HttpStatus.HTTP_BAD_REQUEST, "请求参数格式错误：" + e.getMostSpecificCause().getMessage());
     }
 
+    /**
+     * SpEL 表达式相关异常
+     */
+    @ExceptionHandler(ExpressionException.class)
+    public ApiResult<Void> handleSpelException(ExpressionException e, HttpServletRequest request) {
+        log.error("请求地址'{}'，SpEL解析异常: {}", request.getRequestURI(), e.getMessage());
+        return ApiResult.fail(HttpStatus.HTTP_INTERNAL_ERROR, "SpEL解析失败：" + e.getMessage());
+    }
 }

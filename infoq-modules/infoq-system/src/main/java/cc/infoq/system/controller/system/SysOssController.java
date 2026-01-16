@@ -13,7 +13,6 @@ import cc.infoq.system.domain.vo.SysOssUploadVo;
 import cc.infoq.system.domain.vo.SysOssVo;
 import cc.infoq.system.service.SysOssService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.util.ObjectUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -70,9 +69,6 @@ public class SysOssController extends BaseController {
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResult<SysOssUploadVo> upload(@RequestPart("file") MultipartFile file) {
-        if (ObjectUtil.isNull(file)) {
-            return ApiResult.fail("上传文件不能为空");
-        }
         SysOssVo oss = sysOssService.upload(file);
         SysOssUploadVo uploadVo = new SysOssUploadVo();
         uploadVo.setUrl(oss.getUrl());

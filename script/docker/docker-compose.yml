@@ -99,7 +99,7 @@ services:
     network_mode: "host"
 
   infoq-system1:
-    image: infoq/infoq-system:1.0.1
+    image: infoq/infoq-system:1.0.2
     container_name: infoq-system1
     environment:
       # 时区上海
@@ -112,7 +112,7 @@ services:
     network_mode: "host"
 
   infoq-system2:
-    image: infoq/infoq-system:1.0.1
+    image: infoq/infoq-system:1.0.2
     container_name: infoq-system2
     environment:
       # 时区上海
