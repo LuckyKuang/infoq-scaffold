@@ -77,6 +77,9 @@ public class SysClientController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public ApiResult<Void> add(@Validated(AddGroup.class) @RequestBody SysClientBo bo) {
+        if (!sysClientService.checkClickKeyUnique(bo)) {
+            return ApiResult.fail("新增客户端'" + bo.getClientKey() + "'失败，客户端key已存在");
+        }
         return toAjax(sysClientService.insertByBo(bo));
     }
 
@@ -88,6 +91,9 @@ public class SysClientController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public ApiResult<Void> edit(@Validated(EditGroup.class) @RequestBody SysClientBo bo) {
+        if (!sysClientService.checkClickKeyUnique(bo)) {
+            return ApiResult.fail("修改客户端'" + bo.getClientKey() + "'失败，客户端key已存在");
+        }
         return toAjax(sysClientService.updateByBo(bo));
     }
 

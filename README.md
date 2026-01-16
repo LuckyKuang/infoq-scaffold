@@ -1,18 +1,21 @@
-<div style="font-size: 80px">infoq-scaffold</div>
+<div style="font-size: 64px; font-weight: bold; text-align: center;">infoq-scaffold</div>
 <div style="height: 10px; clear: both;"></div>
 
 - - -
-## 平台简介
+<div style="text-align: center;">
 
 [![GitHub](https://img.shields.io/github/stars/luckykuang/infoq-scaffold.svg?style=social&label=Stars)](https://github.com/luckykuang/infoq-scaffold)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/luckykuang/infoq-scaffold/LICENSE)
 [![使用IntelliJ IDEA开发维护](https://img.shields.io/badge/IntelliJ%20IDEA-提供支持-blue.svg)](https://www.jetbrains.com/?from=infoq-scaffold)
 <br>
-[![infoq-scaffold]( https://img.shields.io/badge/infoq%20scaffold-1.0.0-blue.svg)](https://github.com/luckykuang/infoq-scaffold)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-blue.svg)]()
+[![infoq-scaffold]( https://img.shields.io/badge/infoq%20scaffold-1.0.1-blue.svg)](https://github.com/luckykuang/infoq-scaffold)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-blue.svg)]()
 [![JDK-17](https://img.shields.io/badge/JDK-17-green.svg)]()
+</div>
 
-> `infoq-scaffold` 是基于 `RuoYi-Vue-Plus:5.5.0`进行魔改
+- - -
+
+> `infoq-scaffold` 是基于 `RuoYi-Vue-Plus`进行魔改，比原版更纯净，不夹带任何广告
 
 > 前端项目地址: [infoq-scaffold-ui](https://github.com/luckykuang/infoq-scaffold-ui)
 
