@@ -1,6 +1,8 @@
 package cc.infoq.system.domain.bo;
 
 import cc.infoq.common.constant.RegexConstants;
+import cc.infoq.common.json.validate.JsonPattern;
+import cc.infoq.common.json.validate.JsonType;
 import cc.infoq.common.mybatis.core.domain.BaseEntity;
 import cc.infoq.system.domain.entity.SysMenu;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -61,6 +63,7 @@ public class SysMenuBo extends BaseEntity {
     /**
      * 路由参数
      */
+    @JsonPattern(type = JsonType.OBJECT, message = "路由参数必须符合JSON格式")
     private String queryParam;
 
     /**

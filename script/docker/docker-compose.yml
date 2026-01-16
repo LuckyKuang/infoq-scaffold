@@ -8,7 +8,7 @@ services:
       # root 密码
       MYSQL_ROOT_PASSWORD: root
       # 初始化数据库(后续的初始化sql会在这个库执行)
-      MYSQL_DATABASE: ry-vue
+      MYSQL_DATABASE: infoq
     ports:
       - "3306:3306"
     volumes:
@@ -99,13 +99,12 @@ services:
     network_mode: "host"
 
   infoq-system1:
-    image: infoq/infoq-system:1.0.0
+    image: infoq/infoq-system:1.0.1
     container_name: infoq-system1
     environment:
       # 时区上海
       TZ: Asia/Shanghai
       SERVER_PORT: 8080
-      SNAIL_PORT: 28080
     volumes:
       # 配置文件
       - /docker/server1/logs/:/infoq/server/logs/
@@ -113,13 +112,12 @@ services:
     network_mode: "host"
 
   infoq-system2:
-    image: infoq/infoq-system:1.0.0
+    image: infoq/infoq-system:1.0.1
     container_name: infoq-system2
     environment:
       # 时区上海
       TZ: Asia/Shanghai
       SERVER_PORT: 8081
-      SNAIL_PORT: 28081
     volumes:
       # 配置文件
       - /docker/server2/logs/:/infoq/server/logs/

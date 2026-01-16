@@ -244,6 +244,8 @@ public class SysMenuServiceImpl implements SysMenuService {
                 .setWeight(menu.getOrderNum());
             menuTree.put("menuType", menu.getMenuType());
             menuTree.put("icon", menu.getIcon());
+            menuTree.put("visible", menu.getVisible());
+            menuTree.put("status", menu.getStatus());
         });
     }
 
