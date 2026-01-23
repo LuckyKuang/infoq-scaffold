@@ -26,6 +26,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ import java.util.Set;
  *
  * @author Lion Li
  */
+@Slf4j
 @AllArgsConstructor
 @Service
 public class SysMenuServiceImpl implements SysMenuService {
@@ -354,6 +356,48 @@ public class SysMenuServiceImpl implements SysMenuService {
             .eq(SysMenu::getParentId, menu.getParentId())
             .ne(ObjectUtil.isNotNull(menu.getMenuId()), SysMenu::getMenuId, menu.getMenuId()));
         return !exist;
+    }
+
+    /**
+     * 校验路由名称是否唯一
+     *
+     * @param menuBo 菜单信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkRouteConfigUnique(SysMenuBo menuBo) {
+        SysMenu menu = MapstructUtils.convert(menuBo, SysMenu.class);
+        if (SystemConstants.TYPE_BUTTON.equals(menu.getMenuType())) {
+            return true;
+        }
+        long menuId = ObjectUtil.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
+        Long parentId = menu.getParentId();
+        String path = menu.getPath();
+        String routeName = StringUtils.isEmpty(menu.getRouteName()) ? path : menu.getRouteName();
+        List<SysMenu> sysMenuList = sysMenuMapper.selectList(
+            new LambdaQueryWrapper<SysMenu>()
+                .in(SysMenu::getMenuType, SystemConstants.TYPE_DIR, SystemConstants.TYPE_MENU)
+                .eq(SysMenu::getPath, path).or().eq(SysMenu::getPath, routeName));
+        for (SysMenu sysMenu : sysMenuList) {
+            if (sysMenu.getMenuId() != menuId) {
+                Long dbParentId = sysMenu.getParentId();
+                String dbPath = sysMenu.getPath();
+                String dbRouteName = StringUtils.isEmpty(sysMenu.getRouteName()) ? dbPath : sysMenu.getRouteName();
+                if (StringUtils.equalsAnyIgnoreCase(path, dbPath) && parentId.longValue() == dbParentId.longValue()) {
+                    log.warn("[同级路由冲突] 同级下已存在相同路由路径 '{}'，冲突菜单：{}", dbPath, sysMenu.getMenuName());
+                    return false;
+                } else if (StringUtils.equalsAnyIgnoreCase(path, dbPath)
+                    && parentId.longValue() == Constants.TOP_PARENT_ID
+                    && dbParentId.longValue() == Constants.TOP_PARENT_ID) {
+                    log.warn("[根目录路由冲突] 根目录下路由 '{}' 必须唯一，已被菜单 '{}' 占用", path, sysMenu.getMenuName());
+                    return false;
+                } else if (StringUtils.equalsAnyIgnoreCase(routeName, dbRouteName)) {
+                    log.warn("[路由名称冲突] 路由名称 '{}' 需全局唯一，已被菜单 '{}' 使用", routeName, sysMenu.getMenuName());
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

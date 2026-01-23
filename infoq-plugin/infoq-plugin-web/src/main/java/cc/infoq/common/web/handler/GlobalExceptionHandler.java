@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.expression.ExpressionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -189,6 +191,16 @@ public class GlobalExceptionHandler {
     public ApiResult<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
         String message = StreamUtils.join(e.getBindingResult().getAllErrors(), DefaultMessageSourceResolvable::getDefaultMessage, ", ");
+        return ApiResult.fail(message);
+    }
+
+    /**
+     * 方法参数校验异常 用于处理 @Validated 注解
+     */
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ApiResult<Void> handlerMethodValidationException(HandlerMethodValidationException e) {
+        log.error(e.getMessage());
+        String message = StreamUtils.join(e.getAllErrors(), MessageSourceResolvable::getDefaultMessage, ", ");
         return ApiResult.fail(message);
     }
 

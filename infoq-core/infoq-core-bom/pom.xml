@@ -14,7 +14,7 @@
     </description>
 
     <properties>
-        <revision>1.0.2</revision>
+        <revision>1.0.3</revision>
     </properties>
 
     <dependencyManagement>
@@ -57,6 +57,13 @@
             <dependency>
                 <groupId>cc.infoq</groupId>
                 <artifactId>infoq-plugin-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- 文档服务 -->
+            <dependency>
+                <groupId>cc.infoq</groupId>
+                <artifactId>infoq-plugin-doc</artifactId>
                 <version>${revision}</version>
             </dependency>
 

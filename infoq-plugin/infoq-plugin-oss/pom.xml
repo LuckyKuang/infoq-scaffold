@@ -32,6 +32,7 @@
             <artifactId>s3</artifactId>
             <exclusions>
                 <!-- 将基于 CRT 的 HTTP 客户端从类路径中移除 -->
+                <!-- 东西 30M 特别大的 jar 包 性能跟 Netty 差不多 有需要可以自行替换使用 -->
                 <exclusion>
                     <groupId>software.amazon.awssdk</groupId>
                     <artifactId>aws-crt-client</artifactId>

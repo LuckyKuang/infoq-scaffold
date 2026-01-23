@@ -26,6 +26,7 @@
         <module>infoq-plugin-translation</module>
         <module>infoq-plugin-web</module>
         <module>infoq-plugin-websocket</module>
+        <module>infoq-plugin-doc</module>
     </modules>
 
     <artifactId>infoq-plugin</artifactId>

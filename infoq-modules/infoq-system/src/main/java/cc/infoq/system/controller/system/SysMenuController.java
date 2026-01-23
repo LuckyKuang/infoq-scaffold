@@ -137,6 +137,8 @@ public class SysMenuController extends BaseController {
             return ApiResult.fail("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         } else if (SystemConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath())) {
             return ApiResult.fail("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
+        } else if (!sysMenuService.checkRouteConfigUnique(menu)) {
+            return ApiResult.fail("新增菜单'" + menu.getMenuName() + "'失败，路由名称或地址已存在");
         }
         return toAjax(sysMenuService.insertMenu(menu));
     }
@@ -156,6 +158,8 @@ public class SysMenuController extends BaseController {
             return ApiResult.fail("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         } else if (menu.getMenuId().equals(menu.getParentId())) {
             return ApiResult.fail("修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
+        } else if (!sysMenuService.checkRouteConfigUnique(menu)) {
+            return ApiResult.fail("修改菜单'" + menu.getMenuName() + "'失败，路由名称或地址已存在");
         }
         return toAjax(sysMenuService.updateMenu(menu));
     }

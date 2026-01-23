@@ -48,3 +48,4 @@ nbdist/
 
 .flattened-pom.xml
 application-local.yml
+.vscode/

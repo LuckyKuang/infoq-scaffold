@@ -4,6 +4,7 @@ import cc.infoq.common.service.UserService;
 import cc.infoq.common.translation.annotation.TranslationType;
 import cc.infoq.common.translation.constant.TransConstant;
 import cc.infoq.common.translation.core.TranslationInterface;
+import cn.hutool.core.convert.Convert;
 import lombok.AllArgsConstructor;
 
 /**
@@ -19,9 +20,6 @@ public class UserNameTranslationImpl implements TranslationInterface<String> {
 
     @Override
     public String translation(Object key, String other) {
-        if (key instanceof Long id) {
-            return userService.selectUserNameById(id);
-        }
-        return null;
+        return userService.selectUserNameById(Convert.toLong(key));
     }
 }

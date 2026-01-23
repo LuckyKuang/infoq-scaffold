@@ -31,6 +31,11 @@
             <artifactId>infoq-plugin-translation</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.infoq</groupId>
+            <artifactId>infoq-plugin-doc</artifactId>
+        </dependency>
+
         <!-- OSS功能模块 -->
         <dependency>
             <groupId>cc.infoq</groupId>
